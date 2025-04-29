@@ -9,7 +9,8 @@ BEGIN {
     E6 = "mod_jk child init <*> <*>";
     OFS = ",";
 }
-
+{gsub("\r","",$0)
+        gsub("\n","",$0)}
 /jk2_init\(\) Found child [^ ]* in scoreboard slot [^ ]*/ {
     print $0, "E1", E1 >> "tmp.csv";
     next;

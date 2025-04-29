@@ -1,18 +1,18 @@
 #!/bin/bash
 
-# Usage: bash_scripts/filter_csv.sh "2025-04-25T14:30" "2025-04-30T23:59" input.csv output.csv
+# Usage: bash_scripts/filter_csv.sh "2025-04-25T14:30" "2025-04-30T23:59" input.csv
 start_time="$1"
 end_time="$2"
 input_file="$3"
 output_file="$4"
 log_type=$(cat tmp/logtype.txt)
 
-
+# Portable epoch conversion function
 datetime_to_epoch() {
     local dt="${1/T/ }"
-    local pattern="^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$"
+    local pattern='^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$'
     
-    if [[ "$dt" =~ "$pattern" ]]; then
+    if [[ "$dt" =~ $pattern ]]; then
         if date --version >/dev/null 2>&1; then
             date -d "$dt" +%s 2>/dev/null
         else
@@ -24,7 +24,7 @@ datetime_to_epoch() {
 }
 
 
-# convert to seconds since epoch
+# Convert with error handling
 start_epoch=$(datetime_to_epoch "$start_time") || { echo "Invalid start_time"; exit 1; }
 end_epoch=$(datetime_to_epoch "$end_time") || { echo "Invalid end_time"; exit 1; }
 
@@ -89,7 +89,7 @@ NR == 1 {
     }
 
     if (epoch != "" && epoch >= st && epoch <= et) {
-        gsub("\r","",$0)
+    gsub("\r","",$0)
         gsub("\n","",$0)
         print $0
     }

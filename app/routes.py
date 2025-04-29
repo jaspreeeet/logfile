@@ -18,7 +18,7 @@ def home():
 def upload():
     return render_template('upload.html')                                               # this shows the file upload page
 
-@views.route('/upload', methods=['POST'])                                               # this is triggered when method "post" is used on /upload
+@views.route('/upload', methods=['POST'])                                             
 def uploaded():
     global original
     
