@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weasleys' Wizarding Logs</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            color: white;
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: black;
+        }
+        body.dragging {
+            filter: blur(5px);
+        }
+
+        body.blur {
+            filter: blur(5px)
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content" id="content">
+            <h1 style="font-family: hp; font-size: xx-large">Welcome to the Mischief Manager!</h1>
+            <img src='{{ url_for("static", filename="media/fng.png") }}' style="size: 50%;" alt="Fred and George">
+            <p style="font-family: hp; font-size: xx-large">Upload your pranks, spells, and magical logs, and we'll manage the chaos for you!</p>
+
+            <div class="upload-container">
+                <form action="/upload" method="post" enctype="multipart/form-data">
+                    <input type="file" name="logfile" id="logfile" accept=".log" required style="display: none;">
+                    <label for="logfile" class="custom-upload">Deliver your decree to the mischief registry!</label>
+
+                    <br>
+
+                    <label for="house">Choose your House (or not if you're a Muggle):</label>
+                    <select name="house" id="house" required onchange="updateHouseColor()">
+                        <option value="muggle">Muggle</option>                  <!-- default -->
+                        <option value="gryffindor">Gryffindor</option>
+                        <option value="hufflepuff">Hufflepuff</option>
+                        <option value="ravenclaw">Ravenclaw</option>
+                        <option value="slytherin">Slytherin</option>
+                    </select>
+
+                    <br><br>
+
+                    <label for="file-name" id="file-name">No file selected</label>
+                    
+                    <button type="submit" class="btn-upload">Proceed</button>
+                </form>
+            </div>
+
+            <p style="font-family: hp; font-size: x-large">Now available at 50 Bertie Bott's Beans!</p>
+        </div>
+    </div>
+
+    <script>
+        // Update the file name label when a file is selected
+        document.getElementById('logfile').addEventListener('change', function () {
+            var fileName = this.files[0] ? this.files[0].name : 'No file selected';
+            document.getElementById('file-name').textContent = 'Selected File: ' + fileName;
+        });
+
+        // Update the form button color based on the selected house
+        function updateHouseColor() {
+            var house = document.getElementById('house').value;
+            var button = document.querySelector('.btn-upload');
+
+            // Reset button class to remove previous house classes
+            button.classList.remove('gryffindor', 'hufflepuff', 'ravenclaw', 'slytherin', 'muggle');
+
+            // Add the selected house class or Muggle class
+            button.classList.add(house);
+        }
+// Allow the entire page to receive the drag event and add a blur effect
+document.body.addEventListener('dragover', (e) => {
+    e.preventDefault();  // Prevent default behavior
+    document.body.style.filter = 'blur(3px)'
+});
+
+document.body.addEventListener('drop', (e) => {
+    e.preventDefault();  // Prevent default behavior
+    document.body.style.filter = 'none';
+});
+
+
+// On drop, prevent default and update the input with the dragged file
+document.body.addEventListener('drop', (e) => {
+    e.preventDefault();  // Prevent default behavior
+    document.body.style.filter = 'none';
+
+    // Get the first file from the dropped files
+    const file = e.dataTransfer.files[0];
+    
+    if (file) {
+        // Check if the file is a .log file
+        if (file.name.endsWith('.log')) {
+            // Set the file to the hidden input field
+            const fileInput = document.getElementById('logfile');
+            fileInput.files = e.dataTransfer.files;
+            
+            // Update the label with the selected file name
+            document.getElementById('file-name').textContent = 'Selected File: ' + file.name;
+        } else {
+            // If it's not a .log file, show an error message
+            alert('Error: Please select a .log file!');
+        }
+    }
+});
+</script>
+</body>
+</html>

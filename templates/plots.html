@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Plot Gallery</title>
+    <style>
+
+@font-face {
+            font-family: 'hp';
+            src: url('/static/fonts/hp.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+            font-size: x-large;
+        }
+
+
+
+        body {
+            font-family: hp;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            margin-top: 1em;
+        }
+
+        .plot-section {
+            margin: 2em auto;
+            padding: 1em;
+            border-radius: 20px;
+            width: 80%;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        }
+
+        img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-bottom: 1em;
+        }
+
+        .buttons {
+            margin-top: 1em;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .buttons a {
+            text-decoration: none;
+            padding: 0.6em 1em;
+            margin: 0.5em;
+            border-radius: 10px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        /* --- HOUSE THEMES --- */
+        .gryffindor {
+            background-color: #7f0909;
+            color: #feda3e;
+        }
+
+        .gryffindor .plot-section {
+            background: #b22222;
+            border: 3px solid #feda3e;
+        }
+
+        .gryffindor .buttons a {
+            background-color: #feda3e;
+            color: #7f0909;
+        }
+
+        .gryffindor .buttons a:hover {
+            background-color: #ffec7d;
+        }
+
+        .hufflepuff {
+            background-color: #ecb939;
+            color: #000;
+        }
+
+        .hufflepuff .plot-section {
+            background: #f6e27f;
+            border: 3px solid #000;
+        }
+
+        .hufflepuff .buttons a {
+            background-color: #000;
+            color: #ecb939;
+        }
+
+        .hufflepuff .buttons a:hover {
+            background-color: #333;
+        }
+
+        .ravenclaw {
+            background-color: #0e1a40;
+            color: #946b2d;
+        }
+
+        .ravenclaw .plot-section {
+            background: #1c2a6a;
+            border: 3px solid #946b2d;
+        }
+
+        .ravenclaw .buttons a {
+            background-color: #946b2d;
+            color: #0e1a40;
+        }
+
+        .ravenclaw .buttons a:hover {
+            background-color: #b68a53;
+        }
+
+        .slytherin {
+            background-color: #1a472a;
+            color: #c0c0c0;
+        }
+
+        .slytherin .plot-section {
+            background: #2a623d;
+            border: 3px solid #c0c0c0;
+        }
+
+        .slytherin .buttons a {
+            background-color: #c0c0c0;
+            color: #1a472a;
+        }
+
+        .slytherin .buttons a:hover {
+            background-color: #e0e0e0;
+        }
+
+        .muggle {
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .muggle .plot-section {
+            background: white;
+            border: 2px solid #ccc;
+        }
+
+        .muggle .buttons a {
+            background-color: #ccc;
+            color: #333;
+        }
+
+        .muggle .buttons a:hover {
+            background-color: #999;
+        }
+    </style>
+</head>
+<body class="{{ house|lower }}">
+
+    <h1 style="font-size: 70px;"> your mischieves plotted </h1>
+
+    <form action="{{ url_for('views.plot_options', filename=filename, house=house) }}" method="post" style="margin-bottom: 20px;">
+        <label for="from">From:</label>
+        <input type="datetime-local" id="from" name="from" step=1 required placeholder="yyyy-mm-ddThh:mm:ss">
+
+        <label for="to">To:</label>
+        <input type="datetime-local" id="to" name="to" step=1 required placeholder="yyyy-mm-ddThh:mm:ss">
+
+        <button type="submit">Filter Plots</button>
+    </form>
+
+
+    {% for key, plots in plot_files.items() %}
+        <div class="plot-section">
+            <h2 style="font-size: 60px;" >{{ key|capitalize }} Plot</h2>
+            {% for plot in plots %}
+                <img src="{{ url_for('static', filename='plots/' + filename[:-4] + '/' + plot) }}" alt="{{ plot }}">
+                <div class="buttons">
+                    <a href="{{ url_for('static', filename='plots/' + filename[:-4] + '/' + plot) }}" download="{{ plot }}">Download PNG</a>
+                    <a href="{{ url_for('views.download_jpeg', filename=filename[:-4], plotname=plot) }}">Download JPEG</a>
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+
+</body>
+</html>

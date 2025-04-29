@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+    
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Mischief Managed: Results</title>
+    <style>
+        body {
+            background-color: black;
+            color: #fdf6e3;
+            font-family: 'hp', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+        }
+    :root {
+        --gryffindor: #7f0909;
+        --hufflepuff: #ecb939;
+        --ravenclaw: #222f5b;
+        --slytherin: #1a472a;
+        --text-light: #fdf6e3;
+    }
+
+    body {
+        background-color: black;
+        color: var(--text-light);
+        font-family: 'hp', sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: 100vh;
+        transition: background-color 0.3s ease;
+    }
+
+    .option-btn {
+        padding: 10px 20px;
+        border-radius: 12px;
+        margin: 10px;
+        border: none;
+        cursor: pointer;
+        font-size: 18px;
+        transition: all 0.3s ease-in-out;
+        color: #fffbe6;
+    }
+
+    .gryffindor .option-btn {
+        background: #c43a3a;
+    }
+
+    .gryffindor .option-btn:hover {
+        background: gold;
+        color: #b22222;
+        box-shadow: 0 0 12px gold;
+    }
+
+    .hufflepuff .option-btn {
+        background: #f1cf78 ;
+        color: black;
+    }
+
+    .hufflepuff .option-btn:hover {
+        background:black;
+        color:#ecb939;
+        box-shadow: 0 0 12px rgb(239, 234, 207);
+    }
+
+    .ravenclaw .option-btn {
+        background: #576bae;
+    }
+
+    .ravenclaw .option-btn:hover {
+        background: #222f5b;
+        text-shadow: 0px 2px 2px silver;
+        box-shadow: 0 5px 15px skyblue;
+    }
+
+    .slytherin .option-btn {
+        background: #4a865e;
+    }
+
+    .slytherin .option-btn:hover {
+        background: silver;
+        color:#2a623d;
+        box-shadow: 0 0 12px silver;
+    }
+
+    .slytherin h1,p,button,body {
+        text-shadow: 1px 0px 2px silver;
+    }
+
+        .option-btn {
+            background: #4f270a;
+            color: #fffbe6;
+            padding: 10px 20px;
+            border-radius: 12px;
+            margin: 10px;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s ease-in-out;
+        }
+        .option-btn:hover {
+            background: #8b4513;
+            transform: scale(1.1);
+            box-shadow: 0 0 12px gold;
+        }
+    </style>
+</head>
+<body class="{{house}}">
+    <h1 style="font-size:100px;">your mischief has been managed !</h1>
+    <p style="font-size:50px" > we have identified you mischief to fall under <span style="text-shadow:2px 3px 4px black; font-size:70px ;"><strong>{{log_type}}</strong></span> in accordance with the muggle techonology act, 1968. <br> 
+        what would you like to do with <strong>{{ filename }}</strong>?</p>
+
+    <form action="{{ url_for('views.download', filename=filename) }}" method="get">
+        <input type="hidden" name="house" value="{{ house }}">
+        <button class="option-btn" style="font-family: hp; font-size:40px;"> download CSV</button>
+    </form>
+    
+    
+    <form action="{{ url_for('views.view_csv', filename=filename, house=house, log_type=log_type) }}" method="get">
+        <input type="hidden" name="filename" value="{{ filename }}">
+        <input type="hidden" name="house" value="{{ house }}">
+        <button class="option-btn" style="font-family: hp; font-size:40px;"> view CSV table</button>
+    </form>
+    
+    <form action="{{ url_for('views.plot_options', filename=filename, house=house) }}" method="get">
+        <input type="hidden" name="filename" value="{{ filename }}">
+        <input type="hidden" name="house" value="{{ house }}">
+        <button class="option-btn" style="font-family: hp; font-size:40px;"> view plots</button>
+    </form>
+    
+</body>
+</html>

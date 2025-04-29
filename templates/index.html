@@ -1,0 +1,58 @@
+
+
+<html>
+
+<style>
+    * {
+        cursor: url('{{ url_for("static", filename="cursors/use160.cur") }}') default !important;
+    }
+    body {
+        background: url('{{ url_for("static", filename="media/news.svg") }}') no-repeat fixed;
+        background-position: center center; /* Keeps it centered */
+        background-attachment: fixed; /* Makes the background scroll with the content */
+        background-color: black;
+    }
+
+    .portkey {
+        position: absolute;
+        bottom: 2%;
+        left: 37%;
+        transform: translateX(-50%);
+        cursor: url('cursors/use160.cur'), pointer;
+        transition: transform 0.5s ease-in-out;
+        width: 13%;
+        height: auto;
+    }
+
+    .portkey:hover {
+        transform: rotate(10deg) scale(1.1);
+    }
+
+    * {
+        cursor: url('{{ url_for("static", filename="cursors/use160.cur") }}') default !important;
+    }
+</style>
+    <body>
+        <img class="portkey" id="portkey" src='{{ url_for("static", filename="media/portkey.png") }}' alt="Portkey"> 
+    </body>
+    
+    <script>
+        console.log("chalu hua");
+        let timeout;
+        let portkey = document.getElementById("portkey");
+
+        portkey.addEventListener("pointerdown", function() {
+            timeout = setTimeout(() => {
+                console.log("portkey activated! teleporting...");
+                window.location.href = "/upload";  
+            }, 1500);                                                  // made it 1500 ms because 3 seconds seemed too long, but user won't notice, right?
+        });
+
+        portkey.addEventListener("pointerup", function() {
+            if (timeout) {
+                console.log("portkey released too soon, teleportation failed.");
+                clearTimeout(timeout);
+            }
+        });
+    </script>
+</html>

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        
+    <title>Parsed Log Results</title>
+    <style>
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td {
+        padding: 10px;
+        text-align: left;
+    }
+    td {
+        white-space: nowrap; /* Prevent line breaks */
+    }
+
+
+        @font-face {
+            font-family: 'hp';
+            src: url('/static/fonts/hp.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        body {
+            font-family: "Segoe UI", sans-serif;
+            margin: 2em;
+        }
+
+        /* ==== HOUSE BACKGROUND THEMES ==== */
+        .gryffindor {
+            background-color: #7f0909;
+            color: #feda3e;
+        }
+
+        .slytherin {
+            background-color: #1a472a;
+            color: #d0f0c0;
+        }
+
+        .ravenclaw {
+            background-color: #0e1a40;
+            color: #c0a16b;
+        }
+
+        .hufflepuff {
+            background-color: #ecb939;
+            color: #000000;
+        }
+
+        .muggle {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            font-weight: bold;
+            animation: glow 2.5s ease-in-out infinite alternate;
+        }
+
+        /* ==== HOUSE GLOW TEXT SHADOW ==== */
+        .gryffindor h1 {
+            text-shadow: 0 0 3px #ff0000, 0 0 8px #ff4500, 0 0 10px #ff6347;
+        }
+
+        .slytherin h1 {
+            text-shadow: 0 0 3px #00ff7f, 0 0 8px #3cb371, 0 0 10px #66cdaa;
+        }
+
+        .ravenclaw h1 {
+            text-shadow: 0 0 3px #4682b4, 0 0 8px #5f9ea0, 0 0 10px #87cefa;
+        }
+
+        .hufflepuff h1 {
+            text-shadow: 0 0 3px #ffd700, 0 0 8px #ffec8b, 0 0 10px #fffacd;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 3px #fff;
+            }
+            to {
+                text-shadow: 0 0 10px #fff, 0 0 15px #fff;
+            }
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2em;
+        }
+
+        th, td {
+            padding: 0.8em;
+            text-align: left;
+        }
+
+        .option-btn {
+        padding: 10px 20px;
+        border-radius: 12px;
+        margin: 10px;
+        border: none;
+        cursor: pointer;
+        font-size: 18px;
+        transition: all 0.3s ease-in-out;
+        color: #bab8b0;
+    }
+
+        /* ==== HOUSE STYLED TABLE HEADERS ==== */
+        .gryffindor th {
+            background-color: #671a17;
+            color: #e5d074;
+            text-shadow:  1px 2px 1px rgb(180, 66, 66);
+        }
+
+        .slytherin th {
+            background-color: #2f8d57;
+            color: #d0f0c0;
+        }
+
+        .ravenclaw th {
+            background-color: #264f8c;
+            color: #c0a16b;
+        }
+
+        .hufflepuff th {
+            background-color: #d8c631;
+            color: #000000;
+        }
+
+        .muggle th {
+            background-color: grey;
+            color: silver;
+        }
+
+        /* ==== HOUSE STYLED TABLE ROWS ==== */
+        .gryffindor tr:nth-child(even) { background-color: #a83232; }
+        .gryffindor tr:nth-child(odd)  { background-color: #7f1d1d; }
+
+        .slytherin tr:nth-child(even) { background-color: #2e8b57; }
+        .slytherin tr:nth-child(odd)  { background-color: #145c38; }
+
+        .ravenclaw tr:nth-child(even) { background-color: #1c2e5a; }
+        .ravenclaw tr:nth-child(odd)  { background-color: #102040; }
+
+        .hufflepuff tr:nth-child(even) { background-color: #fff2b0; }
+        .hufflepuff tr:nth-child(odd)  { background-color: #ffe681; }
+
+        .muggle tr:nth-child(even) { background-color: #e1e1e1; }
+        .muggle tr:nth-child(odd)  { background-color: #a5a5a5; }
+
+        td {
+            border: 1px solid #555;
+        }
+        /* Base styling for date-time inputs */
+input[type="datetime-local"] {
+    background-color: #f5f5f5;
+    border: 2px solid #ccc;
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 4px;
+    color: #333;
+}
+
+/* House color focus border styles */
+
+/* Gryffindor House: */
+input[type="datetime-local"].gryffindor:focus {
+    border-color: #feda3e;  /* Gryffindor color */
+}
+
+/* Slytherin House: */
+input[type="datetime-local"].slytherin:focus {
+    border-color: #2f8d57;  /* Slytherin color */
+}
+
+/* Ravenclaw House: */
+input[type="datetime-local"].ravenclaw:focus {
+    border-color: #264f8c;  /* Ravenclaw color */
+}
+
+/* Hufflepuff House: */
+input[type="datetime-local"].hufflepuff:focus {
+    border-color: #d8c631;  /* Hufflepuff color */
+}
+
+/* Muggle (default) styling: */
+input[type="datetime-local"].muggle:focus {
+    border-color: #777;  /* Default color */
+}
+
+    
+
+    </style>
+</head>
+<body class="{{ house }}">
+    <h1 style="font-family: hp; font-size: 90px;"> Your Structured CSV</h1>
+    <span>
+    <!-- Filter Button - positioned at top-left -->
+    <button class="option-btn" id="filterBtn" style="font-size: 40px; font-family: hp;">
+        <span style="vertical-align: middle;">🔎</span> Select time range
+    </button>
+    <!-- Modal for Date Input -->
+    <div id="filterModal" style="font-family: hp; display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0,0,0,0.6); z-index: 999; align-items: center; justify-content: center;">
+        <div style="background-color: white; padding: 2em 2.5em; width: 350px; margin: auto; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.25); position: relative;">
+            <button id="closeModalBtn" aria-label="Close" style="position: absolute; top: 12px; right: 16px; background: none; border: none; font-size: 2em; color: #888; cursor: pointer;">&times;</button>
+            <h2 style="text-align: center; margin-bottom: 1em;">Filter CSV by Date</h2>
+            <form action="{{ url_for('views.view_csv', filename=filename, house=house) }}" method="post" id="filterForm">
+                <input type="hidden" name="filename" value="{{ filename }}">
+                <input type="hidden" name="house" value="{{ house }}">
+                <div style="display: flex; flex-direction: column; gap: 1em;">
+                    <p style="font-family: hp; font-size: x-large;">In case you're filtering syslogs, <br> select year as current year.</p>
+                    <label for="start_time" style="font-size: 1.2em;">Start Date:</label>
+                    <input type="datetime-local" id="start_time" step="1" name="start_time" required placeholder="yyyy-mm-ddThh:mm:ss">
+                    <label for="end_time" style="font-size: 1.2em;">End Date:</label>
+                    <input type="datetime-local" id="end_time" step="1" name="end_time" required placeholder="yyyy-mm-ddThh:mm:ss">
+                </div>
+                <button type="submit" class="option-btn" style="font-size: 1.2em; margin-top: 1.5em; width: 100%; font-family: hp;">Apply Filter</button>
+            </form>
+        </div>
+    </div>
+
+    
+
+    <a href="{{ url_for('views.view_csv', filename=og, house=house) }}" style="left:90%;" >
+        <button type="button" style="font-family: hp;" class="option-btn">Back to Original</button>
+    </a>
+
+    <form action="{{ url_for('views.download', filename=displayed) }}" method="get">
+        <input type="hidden" name="house" value="{{ house }}">
+        <button class="option-btn" style="font-family: hp; font-size:40px;"> download CSV</button>
+    </form>
+</span>
+    
+    
+    
+
+    <form method="get" action="">
+        <input type="hidden" name="filename" value="{{ filename }}">
+        <input type="hidden" name="house" value="{{ house }}">
+        <table class="table table-bordered table-striped table-hover">
+            <thead>
+                <tr>
+                    {% for col in header %}
+                        <th>
+                            {{ col.name }}
+                            {% if unique_values and col.id in unique_values %}
+                                <br>
+                                <select name="filter_{{ col.id }}" onchange="this.form.submit()">
+                                    <option value="">All</option>
+                                    {% for val in unique_values[col.id] %}
+                                        <option value="{{ val }}">{{ val }}</option>
+                                    {% endfor %}
+                                </select>
+                            {% endif %}
+                        </th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in csv_data %}
+                    <tr>
+                        {% for column in row %}
+                            <td>{{ column }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="submit">Filter</button>
+    </form>
+    
+    
+    
+    
+        
+</body>
+<script>
+// Modal open/close logic
+const filterBtn = document.getElementById("filterBtn");
+const filterModal = document.getElementById("filterModal");
+const closeModalBtn = document.getElementById("closeModalBtn");
+
+// Open modal
+filterBtn.onclick = () => { filterModal.style.display = "flex"; };
+
+// Close modal
+closeModalBtn.onclick = () => { filterModal.style.display = "none"; };
+
+// Close on overlay click
+filterModal.onclick = (event) => {
+    if (event.target === filterModal) filterModal.style.display = "none";
+};
+
+// Close on Esc key
+document.addEventListener('keydown', function(event) {
+    if (event.key === "Escape") filterModal.style.display = "none";
+});
+
+</script>
+
+
+</html>
