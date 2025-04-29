@@ -10,16 +10,16 @@ log_type=$(cat tmp/logtype.txt)
 # Portable epoch conversion function
 datetime_to_epoch() {
     local dt="${1/T/ }"
-    local pattern='^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$'
-    
-    if [[ "$dt" =~ $pattern ]]; then
-        if date --version >/dev/null 2>&1; then
-            date -d "$dt" +%s 2>/dev/null
-        else
-            date -j -f "%Y-%m-%d %H:%M:%S" "$dt" +%s 2>/dev/null
-        fi
+    # Add seconds if missing
+    if [[ ! "$dt" =~ :[0-9]{2}$ ]]; then
+        dt="${dt}:00"
+    fi
+    if date --version >/dev/null 2>&1; then
+        # GNU date (Linux)
+        date -d "$dt" +%s 2>/dev/null
     else
-        return 1
+        # BSD date (macOS)
+        date -j -f "%Y-%m-%d %H:%M:%S" "$dt" +%s 2>/dev/null
     fi
 }
 
